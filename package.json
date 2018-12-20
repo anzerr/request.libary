@@ -18,5 +18,5 @@
 	},
 	"eslintConfig": {
 		"extends": "eslint-config-basic"
-	},
+	}
 }
