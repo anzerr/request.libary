@@ -6,7 +6,7 @@
 	"homepage": "https://github.com/anzerr/request.libary#readme",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/anzerr/request.libary.git"
+		"url": "git+https://github.com/anzerr/request.libary.git"
 	},
 	"scripts": {},
 	"keywords": [],
@@ -18,5 +18,12 @@
 	},
 	"eslintConfig": {
 		"extends": "eslint-config-basic"
+	},
+	"engines": {
+		"node": ">= 0.10.0"
+	},
+	"types": "index.d.ts",
+	"bugs": {
+		"url": "https://github.com/anzerr/request.libary/issues"
 	}
 }
