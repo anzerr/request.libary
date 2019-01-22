@@ -17,8 +17,9 @@ class Request {
 		this.url = url.parse(base);
 		this._headers = {};
 		this._options = {};
+		this.query = null;
 		this.data = {
-			value: '',
+			value: null,
 			type: null
 		};
 	}
@@ -34,6 +35,9 @@ class Request {
 			};
 			for (let i in this._options) {
 				option[i] = this._options[i];
+			}
+			if (this.query) {
+				option.path += '?' + this.query;
 			}
 
 			// console.log(this.url, option, isHttps, this.data);
@@ -59,23 +63,22 @@ class Request {
 	}
 
 	query(data) {
-		this.data.value = querystring.stringify(data);
-		this.data.type = 'query';
+		this.query = querystring.stringify(data);
 		return this;
 	}
 
 	json(data) {
-		this.data.value = JSON.stringify(data);
+		this.data.value = Buffer.from(JSON.stringify(data));
 		this.data.type = 'json';
 		this.headers({
-			'Content-Length': Buffer.byteLength(this.data.value, 'utf8'),
+			'Content-Length': this.data.value.length,
 			'Content-Type': 'application/json'
 		});
 		return this;
 	}
 
 	form(data) {
-		this.data.value = querystring.stringify(data);
+		this.data.value = Buffer.from(querystring.stringify(data));
 		this.data.type = 'form';
 		this.headers({
 			'Content-Length': this.data.value.length,
