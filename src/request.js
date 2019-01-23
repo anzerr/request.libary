@@ -17,7 +17,7 @@ class Request {
 		this.url = url.parse(base);
 		this._headers = {};
 		this._options = {};
-		this.data = {
+		this._data = {
 			query: null,
 			value: null,
 			type: null
@@ -36,11 +36,10 @@ class Request {
 			for (let i in this._options) {
 				option[i] = this._options[i];
 			}
-			if (this.data.query) {
-				option.path += '?' + this.data.query;
+			if (this._data.query) {
+				option.path += '?' + this._data.query;
 			}
 
-			// console.log(this.url, option, isHttps, this.data);
 			let req = (isHttps ? https : http).request(option, (res) => {
 				let chunks = [];
 
@@ -55,40 +54,38 @@ class Request {
 				reject(err);
 			});
 
-			if (this.data.value) {
-				req.write(this.data.value);
+			if (this._data.value) {
+				req.write(this._data.value);
 			}
 			req.end();
 		});
 	}
 
 	query(data) {
-		this.data.query = querystring.stringify(data);
+		this._data.query = querystring.stringify(data);
 		return this;
 	}
 
 	json(data) {
-		this.data.value = Buffer.from(JSON.stringify(data));
-		this.data.type = 'json';
+		this.data(JSON.stringify(data))._data.type = 'json';
 		this.headers({
-			'Content-Length': this.data.value.length,
+			'Content-Length': this._data.value.length,
 			'Content-Type': 'application/json'
 		});
 		return this;
 	}
 
 	form(data) {
-		this.data.value = Buffer.from(querystring.stringify(data));
-		this.data.type = 'form';
+		this.data(querystring.stringify(data))._data.type = 'form';
 		this.headers({
-			'Content-Length': this.data.value.length,
+			'Content-Length': this._data.value.length,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		});
 		return this;
 	}
 
 	data(data) {
-		this._config.data = data;
+		this._data.value = Buffer.isBuffer(data) ? data : Buffer.from(data);
 		return this;
 	}
 
