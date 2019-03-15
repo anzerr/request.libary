@@ -1,5 +1,7 @@
 'use strict';
 
+const querystring = require('querystring');
+
 class Response {
 
 	constructor(request, data) {
@@ -31,12 +33,19 @@ class Response {
 		return this._data;
 	}
 
-	parsedBody() {
+	parse() {
 		let content = this.headers()['content-type'];
-		if (content.match('application/json')) {
-			return JSON.parse(this._data.toString());
+		if (content.match('json')) {
+			try {
+				return JSON.parse(this._data.toString());
+			} catch(e) {
+				return this._data;
+			}
 		}
-		throw new Error('unsupported format "' + content + '"');
+		if (content.match('application/x-www-form-urlencoded')) {
+			return querystring.parse(this._data.toString());
+		}
+		return this._data;
 	}
 
 }

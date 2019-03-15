@@ -8,12 +8,14 @@
 		"type": "git",
 		"url": "git+https://github.com/anzerr/request.libary.git"
 	},
-	"scripts": {},
+	"scripts": {
+		"test": "node test.js"
+	},
 	"keywords": [],
 	"author": "anzerr",
-	"license": "ISC",
+	"license": "MIT",
 	"devDependencies": {
-		"eslint": "^5.8.0",
+		"eslint": "5.11.1",
 		"eslint-config-basic": "git+ssh://git@github.com/anzerr/eslintrc.git"
 	},
 	"eslintConfig": {

@@ -4,7 +4,8 @@ const https = require('https'),
 	http = require('http'),
 	url = require('url'),
 	querystring = require('querystring'),
-	Response = require('./response.js');
+	Response = require('./response.js'),
+	download = require('./download.js');
 
 class Request {
 
@@ -24,7 +25,7 @@ class Request {
 		};
 	}
 
-	_request(method, u) {
+	_request(method, u = '') {
 		return new Promise((resolve, reject) => {
 			const isHttps = (this.url.protocol === 'https:'), option = {
 				method: method || 'GET',
@@ -58,6 +59,15 @@ class Request {
 				req.write(this._data.value);
 			}
 			req.end();
+		}).then((res) => {
+			if (res.isStatus(3) && this._options.redirect !== false) {
+				let n = new Request(res.headers().location);
+				n._headers = this._headers;
+				n._options = this._options;
+				n._data = this._data;
+				return n._request(method, '');
+			}
+			return res;
 		});
 	}
 
@@ -120,5 +130,7 @@ class Request {
 	}
 
 }
+
+Request.download = download;
 
 module.exports = Request;
