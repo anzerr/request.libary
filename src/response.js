@@ -34,15 +34,15 @@ class Response {
 	}
 
 	parse() {
-		let content = this.headers()['content-type'];
-		if (content.match('json')) {
+		let content = this.headers()['content-type'] || '';
+		if (content && content.match('json')) {
 			try {
 				return JSON.parse(this._data.toString());
 			} catch(e) {
 				return this._data;
 			}
 		}
-		if (content.match('application/x-www-form-urlencoded')) {
+		if (content && content.match('application/x-www-form-urlencoded')) {
 			return querystring.parse(this._data.toString());
 		}
 		return this._data;
