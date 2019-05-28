@@ -1,31 +1,30 @@
 {
 	"name": "request.libary",
 	"version": "1.0.1",
-	"description": "",
-	"main": "index.js",
+	"keywords": [],
 	"homepage": "https://github.com/anzerr/request.libary#readme",
+	"bugs": {
+		"url": "https://github.com/anzerr/request.libary/issues"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/anzerr/request.libary.git"
 	},
+	"license": "MIT",
+	"author": "anzerr",
+	"main": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
 		"test": "node test.js"
-	},
-	"keywords": [],
-	"author": "anzerr",
-	"license": "MIT",
-	"devDependencies": {
-		"eslint": "5.11.1",
-		"eslint-config-basic": "git+ssh://git@github.com/anzerr/eslintrc.git"
 	},
 	"eslintConfig": {
 		"extends": "eslint-config-basic"
 	},
+	"devDependencies": {
+		"eslint": "5.11.1",
+		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
+	},
 	"engines": {
 		"node": ">= 0.10.0"
-	},
-	"types": "index.d.ts",
-	"bugs": {
-		"url": "https://github.com/anzerr/request.libary/issues"
 	}
 }
