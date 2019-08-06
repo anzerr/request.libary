@@ -4,7 +4,7 @@ Simple request object without having to pull 47 extra packages
 
 #### `Install`
 ``` bash
-npm install --save git+https://git@github.com/anzerr/request.libary.git
+npm install --save git+https://github.com/anzerr/request.libary.git
 ```
 
 ### `Example`
