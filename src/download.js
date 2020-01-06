@@ -5,14 +5,14 @@ const http = require('http'),
 	url = require('url');
 
 module.exports = (u, path) => {
-	let file = fs.createWriteStream(path);
-	return new Promise((resolve) => {
-		let a = url.parse(u);
-		((a.protocol === 'https:') ? https : http).get(a, (response) => {
+	const file = fs.createWriteStream(path);
+	return new Promise((resolve, reject) => {
+		const a = url.parse(u);
+		console.log(u);
+		((a.protocol === 'https:') ? https : http).get(u, (response) => {
+			file.on('error', (err) => reject(err));
+			file.on('close', () => resolve(path));
 			response.pipe(file);
-			file.on('close', () => {
-				resolve(path);
-			});
-		});
+		}).on('error', (err) => reject(err));
 	});
 };

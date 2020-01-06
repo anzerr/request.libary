@@ -1,6 +1,7 @@
 {
 	"name": "request.libary",
 	"version": "1.0.8",
+	"description": "http request util",
 	"keywords": [],
 	"homepage": "https://github.com/anzerr/request.libary#readme",
 	"bugs": {
@@ -15,6 +16,7 @@
 	"main": "index.js",
 	"types": "index.d.ts",
 	"scripts": {
+		"linter": "eslint src/**",
 		"test": "node test.js"
 	},
 	"eslintConfig": {

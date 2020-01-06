@@ -12,9 +12,7 @@ const hash = (buf) => {
 };
 
 const wrap = (p) => {
-	return p.then(() => console.log('done')).catch((e) => {
-		throw e;
-	});
+	return p.then(() => console.log('done'));
 };
 
 /* eslint no-sync: 0 */
@@ -23,6 +21,16 @@ wrap(Require.download('https://raw.githubusercontent.com/anzerr/request.libary/m
 	assert.equal(hash(fs.readFileSync(f)), hash(fs.readFileSync('.gitignore')));
 	assert.equal(f, res);
 	fs.unlinkSync(f);
+}).catch((e) => {
+	fs.unlinkSync(f);
+	console.log(e);
+}));
+
+const f2 = path.join(__dirname, 'test.data');
+wrap(Require.download(`http://localhost:${Math.floor(Math.random() * 5000) + 2000}`, f2).then((res) => {
+	throw new Error('should fail');
+}).catch((err) => {
+	assert.equal(err.toString().match('should fail'), null);
 }));
 
 wrap(new Require('https://api.github.com').headers({

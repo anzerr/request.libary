@@ -1,5 +1,9 @@
 
 ### `Intro`
+![GitHub Actions status | linter](https://github.com/anzerr/request.libary/workflows/linter/badge.svg)
+![GitHub Actions status | publish](https://github.com/anzerr/request.libary/workflows/publish/badge.svg)
+![GitHub Actions status | test](https://github.com/anzerr/request.libary/workflows/test/badge.svg)
+
 Simple request object without having to pull 47 extra packages
 
 #### `Install`

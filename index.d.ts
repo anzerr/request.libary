@@ -23,7 +23,7 @@ declare class Request {
 	post(url: string): Promise<Response>;
 	put(url: string): Promise<Response>;
 	delete(url: string): Promise<Response>;
-	download(url: string, path: string): Promise<void>;
+	static download(url: string, path: string): Promise<void>;
 
 }
 
