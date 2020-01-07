@@ -13,6 +13,8 @@ declare class Response {
 declare class Request {
 
 	constructor(host: string);
+	request(method: string, u: string, cd: (...any) => any): any
+	send(method: string, u: string): Promise<Response>
 	query(data: {[key: string]: string | number | boolean}): Request;
 	json(data: any): Request;
 	form(data: any): Request;

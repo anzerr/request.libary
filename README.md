@@ -14,7 +14,7 @@ npm install --save @anzerr/request.libary
 
 ### `Example`
 ``` javascript
-const Request = require('./index.js');
+const Request = require('request.libary');
 
 new Request('https://google.com').get('/').then((res) => {
 	console.log(res.status(), res.body().toString());

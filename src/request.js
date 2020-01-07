@@ -25,36 +25,35 @@ class Request {
 		};
 	}
 
-	_request(method, u = '') {
+	request(method, u = '', cd) {
+		const isHttps = (this.url.protocol === 'https:'), option = {
+			method: method || 'GET',
+			hostname: this.url.hostname,
+			port: this.url.port || (isHttps ? 443 : 80),
+			path: (this.url.pathname + u).replace(/\/{2,}/g, '/'),
+			headers: this._headers || {}
+		};
+		for (let i in this._options) {
+			option[i] = this._options[i];
+		}
+		if (this._data.query) {
+			option.path += '?' + this._data.query;
+		}
+
+		return (isHttps ? https : http).request(option, cd);
+	}
+
+	send(method, u = '') {
 		return new Promise((resolve, reject) => {
-			const isHttps = (this.url.protocol === 'https:'), option = {
-				method: method || 'GET',
-				hostname: this.url.hostname,
-				port: this.url.port || (isHttps ? 443 : 80),
-				path: (this.url.pathname + u).replace(/\/{2,}/g, '/'),
-				headers: this._headers || {}
-			};
-			for (let i in this._options) {
-				option[i] = this._options[i];
-			}
-			if (this._data.query) {
-				option.path += '?' + this._data.query;
-			}
-
-			let req = (isHttps ? https : http).request(option, (res) => {
+			let req = this.request(method, u, (res) => {
 				let chunks = [];
-
 				res.on('data', (chunk) => {
 					chunks.push(chunk);
 				}).on('end', () => {
 					resolve(new Response(res, Buffer.concat(chunks)));
 				});
 			});
-
-			req.on('error', (err) => {
-				reject(err);
-			});
-
+			req.on('error', (err) => reject(err));
 			if (this._data.value) {
 				req.write(this._data.value);
 			}
@@ -65,7 +64,7 @@ class Request {
 				n._headers = this._headers;
 				n._options = this._options;
 				n._data = this._data;
-				return n._request(method, '');
+				return n.send(method, '');
 			}
 			return res;
 		});
@@ -114,19 +113,19 @@ class Request {
 	}
 
 	get(u) {
-		return this._request('get', u || '');
+		return this.send('get', u || '');
 	}
 
 	post(u) {
-		return this._request('post', u || '');
+		return this.send('post', u || '');
 	}
 
 	put(u) {
-		return this._request('put', u || '');
+		return this.send('put', u || '');
 	}
 
 	delete(u) {
-		return this._request('delete', u || '');
+		return this.send('delete', u || '');
 	}
 
 }
