@@ -1,6 +1,7 @@
 
 const Require = require('./index.js'),
 	fs = require('fs'),
+	http = require('http'),
 	assert = require('assert'),
 	crypto = require('crypto'),
 	path = require('path');
@@ -32,6 +33,19 @@ wrap(Require.download(`http://localhost:${Math.floor(Math.random() * 5000) + 200
 }).catch((err) => {
 	assert.equal(err.toString().match('should fail'), null);
 }));
+
+const server = http.createServer((req, res) => {
+	res.writeHead(404, {});
+	res.end('cat');
+}).listen(1358, () => {
+	Require.download('http://localhost:1358', f2).then(() => {
+		throw new Error('should fail');
+	}).catch((err) => {
+		assert.notEqual(err.toString().match('cound not download file status code error'), null);
+	}).then(() => {
+		server.close();
+	});
+});
 
 wrap(new Require('https://api.github.com').headers({
 	'user-agent': 'http://developer.github.com/v3/#user-agent-required'

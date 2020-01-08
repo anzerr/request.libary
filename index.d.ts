@@ -25,7 +25,7 @@ declare class Request {
 	post(url: string): Promise<Response>;
 	put(url: string): Promise<Response>;
 	delete(url: string): Promise<Response>;
-	static download(url: string, path: string): Promise<void>;
+	static download(url: string, path: string, force?: boolean): Promise<void>;
 
 }
 

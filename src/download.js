@@ -4,15 +4,21 @@ const http = require('http'),
 	fs = require('fs'),
 	url = require('url');
 
-module.exports = (u, path) => {
-	const file = fs.createWriteStream(path);
+module.exports = (u, path, force = false) => {
 	return new Promise((resolve, reject) => {
 		const a = url.parse(u);
 		console.log(u);
-		((a.protocol === 'https:') ? https : http).get(u, (response) => {
-			file.on('error', (err) => reject(err));
-			file.on('close', () => resolve(path));
-			response.pipe(file);
-		}).on('error', (err) => reject(err));
+		let req = ((a.protocol === 'https:') ? https : http).get(u, (response) => {
+			if (Math.floor(response.statusCode / 100) === 2 || force) {
+				const file = fs.createWriteStream(path);
+				file.on('error', (err) => reject(err));
+				file.on('close', () => resolve(path));
+				response.pipe(file);
+			} else {
+				req.abort();
+				reject(new Error(`cound not download file status code error "${response.statusCode}"`));
+			}
+		});
+		req.on('error', (err) => reject(err));
 	});
 };
