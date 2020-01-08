@@ -7,7 +7,6 @@ const http = require('http'),
 module.exports = (u, path, force = false) => {
 	return new Promise((resolve, reject) => {
 		const a = url.parse(u);
-		console.log(u);
 		let req = ((a.protocol === 'https:') ? https : http).get(u, (response) => {
 			if (Math.floor(response.statusCode / 100) === 2 || force) {
 				const file = fs.createWriteStream(path);
