@@ -2,7 +2,13 @@
 	"name": "request.libary",
 	"version": "1.0.12",
 	"description": "http request util",
-	"keywords": [],
+	"keywords": [
+		"curl",
+		"http",
+		"nodejs",
+		"request",
+		"util"
+	],
 	"homepage": "https://github.com/anzerr/request.libary#readme",
 	"bugs": {
 		"url": "https://github.com/anzerr/request.libary/issues"
