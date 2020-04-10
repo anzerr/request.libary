@@ -11,7 +11,7 @@ const download = (u, path, force = false) => {
 			if (Math.floor(response.statusCode / 100) === 3) {
 				if (response.headers.location) {
 					req.abort();
-					return download(response.headers.location, u, force).then((r) => {
+					return download(response.headers.location, path, force).then((r) => {
 						resolve(r);
 					}).catch((e) => {
 						reject(e);
