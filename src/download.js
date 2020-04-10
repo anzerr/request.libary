@@ -10,6 +10,7 @@ const download = (u, path, force = false) => {
 		let req = ((a.protocol === 'https:') ? https : http).get(u, (response) => {
 			if (Math.floor(response.statusCode / 100) === 3) {
 				if (response.headers.location) {
+					req.abort();
 					return download(response.headers.location, u, force).then((r) => {
 						resolve(r);
 					}).catch((e) => {
