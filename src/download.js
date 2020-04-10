@@ -16,7 +16,7 @@ const download = (u, path, force = false) => {
 						reject(e);
 					});
 				}
-				reject(new Error(`got a redirect but missing location`));
+				reject(new Error('got a redirect but missing location'));
 			} else if (Math.floor(response.statusCode / 100) === 2 || force) {
 				const file = fs.createWriteStream(path);
 				file.on('error', (err) => reject(err));
@@ -31,4 +31,4 @@ const download = (u, path, force = false) => {
 	});
 };
 
-module.exports = download
+module.exports = download;
