@@ -4,11 +4,20 @@ const http = require('http'),
 	fs = require('fs'),
 	url = require('url');
 
-module.exports = (u, path, force = false) => {
+const download = (u, path, force = false) => {
 	return new Promise((resolve, reject) => {
 		const a = url.parse(u);
 		let req = ((a.protocol === 'https:') ? https : http).get(u, (response) => {
-			if (Math.floor(response.statusCode / 100) === 2 || force) {
+			if (Math.floor(response.statusCode / 100) === 3) {
+				if (response.headers.location) {
+					return download(response.headers.location, u, force).then((r) => {
+						resolve(r);
+					}).catch((e) => {
+						reject(e);
+					});
+				}
+				reject(new Error(`got a redirect but missing location`));
+			} else if (Math.floor(response.statusCode / 100) === 2 || force) {
 				const file = fs.createWriteStream(path);
 				file.on('error', (err) => reject(err));
 				file.on('close', () => resolve(path));
@@ -21,3 +30,5 @@ module.exports = (u, path, force = false) => {
 		req.on('error', (err) => reject(err));
 	});
 };
+
+module.exports = download
