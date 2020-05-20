@@ -4,14 +4,18 @@ const http = require('http'),
 	fs = require('fs'),
 	url = require('url');
 
-const download = (u, path, force = false) => {
+const download = (u, path, force = false, options = {}) => {
 	return new Promise((resolve, reject) => {
 		const a = url.parse(u);
-		let req = ((a.protocol === 'https:') ? https : http).get(u, (response) => {
+		let req = ((a.protocol === 'https:') ? https : http).get(u, options, (response) => {
 			if (Math.floor(response.statusCode / 100) === 3) {
 				if (response.headers.location) {
 					req.abort();
-					return download(response.headers.location, path, force).then((r) => {
+					let loc = response.headers.location;
+					if (loc.match(/^\//)) {
+						loc = `${this.url.protocol}//${this.url.host}${loc}`;
+					}
+					return download(loc, path, force, headers).then((r) => {
 						resolve(r);
 					}).catch((e) => {
 						reject(e);

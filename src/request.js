@@ -60,6 +60,10 @@ class Request {
 			req.end();
 		}).then((res) => {
 			if (res.isStatus(3) && this._options.redirect !== false) {
+				let loc = res.headers().location;
+				if (loc.match(/^\//)) {
+					loc = `${this.url.protocol}//${this.url.host}${loc}`;
+				}
 				let n = new Request(res.headers().location);
 				n._headers = this._headers;
 				n._options = this._options;
