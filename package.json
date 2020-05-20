@@ -1,6 +1,6 @@
 {
 	"name": "request.libary",
-	"version": "1.0.18",
+	"version": "1.0.19",
 	"description": "http request util",
 	"keywords": [
 		"curl",
