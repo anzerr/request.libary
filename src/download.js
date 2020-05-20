@@ -13,9 +13,9 @@ const download = (u, path, force = false, options = {}) => {
 					req.abort();
 					let loc = response.headers.location;
 					if (loc.match(/^\//)) {
-						loc = `${this.url.protocol}//${this.url.host}${loc}`;
+						loc = `${a.protocol}//${a.host}${loc}`;
 					}
-					return download(loc, path, force, headers).then((r) => {
+					return download(loc, path, force, options).then((r) => {
 						resolve(r);
 					}).catch((e) => {
 						reject(e);
