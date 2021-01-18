@@ -40,7 +40,12 @@ class Request {
 			option.path += '?' + this._data.query;
 		}
 
-		return (isHttps ? https : http).request(option, cd);
+		const req = (isHttps ? https : http).request(option, cd);;
+		if (option.timeout) {
+			req.setTimeout(option.timeout);
+			req._forcedTimeout = option.timeout;
+		}
+		return req;
 	}
 
 	send(method, u = '') {
@@ -52,6 +57,16 @@ class Request {
 				}).on('end', () => {
 					resolve(new Response(res, Buffer.concat(chunks)));
 				});
+			});
+			let fallbackTimeout = null;
+			if (req._forcedTimeout) {
+				fallbackTimeout = setTimeout(() => {
+					req.abort();
+				}, req._forcedTimeout * 2)
+			}
+			req.on('timeout', () => {
+				clearTimeout(fallbackTimeout);
+				req.abort();
 			});
 			req.on('error', (err) => reject(err));
 			if (this._data.value) {

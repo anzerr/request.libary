@@ -18,8 +18,8 @@ const wrap = (p) => {
 
 /* eslint no-sync: 0 */
 const f = path.join(__dirname, 'test.data');
-wrap(Require.download('https://raw.githubusercontent.com/anzerr/request.libary/master/.gitignore', f).then((res) => {
-	assert.equal(hash(fs.readFileSync(f)), hash(fs.readFileSync('.gitignore')));
+wrap(Require.download('https://raw.githubusercontent.com/anzerr/request.libary/master/LICENSE', f).then((res) => {
+	assert.equal(hash(fs.readFileSync(f)), hash(fs.readFileSync('LICENSE')));
 	assert.equal(f, res);
 	fs.unlinkSync(f);
 }).catch((e) => {
@@ -35,13 +35,24 @@ wrap(Require.download(`http://localhost:${Math.floor(Math.random() * 5000) + 200
 }));
 
 const server = http.createServer((req, res) => {
-	res.writeHead(404, {});
-	res.end('cat');
+	console.log(req.method);
+	if (req.method === 'GET') {
+		res.writeHead(404, {});
+		res.end('cat');
+	}
 }).listen(1358, () => {
 	Require.download('http://localhost:1358', f2).then(() => {
 		throw new Error('should fail');
 	}).catch((err) => {
 		assert.notEqual(err.toString().match('cound not download file status code error'), null);
+	}).then(() => {
+		return new Require('http://localhost:1358').options({
+			timeout: 3000
+		}).post().then(() => {
+			throw new Error('should fail');
+		}).catch((err) => {
+			assert.notEqual(err.toString().match('socket hang up'), null);
+		});
 	}).then(() => {
 		server.close();
 	});
