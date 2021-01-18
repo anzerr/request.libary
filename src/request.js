@@ -51,13 +51,13 @@ class Request {
 	send(method, u = '') {
 		return new Promise((resolve, reject) => {
 			let fallbackTimeout = null;
-			if (req._forcedTimeout) {
-				fallbackTimeout = setTimeout(() => {
-					req.abort();
-				}, req._forcedTimeout * 2)
-			}
 			let req = this.request(method, u, (res) => {
 				let chunks = [];
+				if (req._forcedTimeout) {
+					fallbackTimeout = setTimeout(() => {
+						req.abort();
+					}, req._forcedTimeout * 2)
+				}
 				res.on('data', (chunk) => {
 					chunks.push(chunk);
 				}).on('end', () => {
