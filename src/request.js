@@ -50,20 +50,21 @@ class Request {
 
 	send(method, u = '') {
 		return new Promise((resolve, reject) => {
-			let req = this.request(method, u, (res) => {
-				let chunks = [];
-				res.on('data', (chunk) => {
-					chunks.push(chunk);
-				}).on('end', () => {
-					resolve(new Response(res, Buffer.concat(chunks)));
-				});
-			});
 			let fallbackTimeout = null;
 			if (req._forcedTimeout) {
 				fallbackTimeout = setTimeout(() => {
 					req.abort();
 				}, req._forcedTimeout * 2)
 			}
+			let req = this.request(method, u, (res) => {
+				let chunks = [];
+				res.on('data', (chunk) => {
+					chunks.push(chunk);
+				}).on('end', () => {
+					clearTimeout(fallbackTimeout);
+					resolve(new Response(res, Buffer.concat(chunks)));
+				});
+			});
 			req.on('timeout', () => {
 				clearTimeout(fallbackTimeout);
 				req.abort();
