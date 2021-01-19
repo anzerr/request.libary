@@ -54,6 +54,14 @@ const server = http.createServer((req, res) => {
 			assert.notEqual(err.toString().match('socket hang up'), null);
 		});
 	}).then(() => {
+		return new Require('http://localhost:1358').options({
+			timeout: 3000
+		}).get().then((res) => {
+			assert.equal(res.status(), 404);
+		}).catch((err) => {
+			throw new Error('should fail');
+		});
+	}).then(() => {
 		server.close();
 	});
 });
