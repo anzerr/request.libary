@@ -40,7 +40,7 @@ class Request {
 			option.path += '?' + this._data.query;
 		}
 
-		const req = (isHttps ? https : http).request(option, cd);;
+		const req = (isHttps ? https : http).request(option, cd);
 		if (option.timeout) {
 			req.setTimeout(option.timeout);
 			req._forcedTimeout = option.timeout;
@@ -56,7 +56,7 @@ class Request {
 				if (req._forcedTimeout) {
 					fallbackTimeout = setTimeout(() => {
 						req.abort();
-					}, req._forcedTimeout * 2)
+					}, req._forcedTimeout * 2);
 				}
 				res.on('data', (chunk) => {
 					chunks.push(chunk);
